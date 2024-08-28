@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content" style="min-height: 608px;">
+    <section class="section">
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Savol yaratish</h4>
+                        </div>
+                        <form method="post" action="{% url 'question_create' quiz_id %}">
+                            {% csrf_token %}
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Savol matni</label>
+                                    <input type="text" class="form-control" name="question_name" placeholder="Savol matnini kiriting" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Variantlar</label>
+                                    <div id="input-container">
+                                        <div class="input-group mb-2">
+                                            <input type="text" class="form-control" name="options[]" placeholder="Variantni kiriting" required>
+                                            <div class="input-group-append">
+                                                <div class="input-group-text bg-primary text-light add-button" style="cursor: pointer;">
+                                                    <i class="fas fa-plus"></i>
+                                                </div>
+                                                <div class="input-group-text bg-danger text-light ml-1 remove-button" style="cursor: pointer;">
+                                                    <i class="fas fa-trash"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>To'g'ri variant</label>
+                                    <div id="correct-option-container">
+                                        <!-- To'g'ri variantni tanlash uchun radio buttonlar joylashtiriladi -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Yaratish</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('input-container');
+
+        function addInputGroup(element) {
+            // Create a new input group
+            const newInputGroup = document.createElement('div');
+            newInputGroup.className = 'input-group mb-2';
+            newInputGroup.innerHTML = `
+                <input type="text" class="form-control" name="options[]" placeholder="Variantni kiriting" required>
+                <div class="input-group-append">
+                    <div class="input-group-text bg-primary text-light add-button" style="cursor: pointer;">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="input-group-text bg-danger text-light ml-1 remove-button" style="cursor: pointer;">
+                        <i class="fas fa-trash"></i>
+                    </div>
+                </div>
+            `;
+
+            // Insert new input group after the current group
+            element.closest('.input-group').after(newInputGroup);
+
+            // Update radio buttons for correct option
+            updateCorrectOptions();
+        }
+
+        function removeInputGroup(element) {
+            // Remove the input group
+            if (container.children.length > 1) {
+                element.closest('.input-group').remove();
+                updateCorrectOptions();
+            }
+        }
+
+        function updateCorrectOptions() {
+            const options = container.querySelectorAll('.input-group');
+            const correctOptionContainer = document.getElementById('correct-option-container');
+            correctOptionContainer.innerHTML = '';
+
+            options.forEach((inputGroup, index) => {
+                const correctOptionHtml = `
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="correct_option" value="${index}" id="correct-option-${index}">
+                        <label class="form-check-label" for="correct-option-${index}">
+                            Variant ${index + 1}
+                        </label>
+                    </div>
+                `;
+                correctOptionContainer.innerHTML += correctOptionHtml;
+            });
+        }
+
+        container.addEventListener('click', function(e) {
+            if (e.target.closest('.add-button')) {
+                addInputGroup(e.target);
+            }
+            if (e.target.closest('.remove-button')) {
+                removeInputGroup(e.target);
+            }
+        });
+
+        // Initialize correct options
+        updateCorrectOptions();
+    });
+</script>
+{% endblock %}

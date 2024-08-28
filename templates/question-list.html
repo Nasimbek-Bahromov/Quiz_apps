@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content" style="min-height: 608px;">
+    <section class="section">
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Savollar ro'yxati</h4>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Savol</th>
+                                        <th>Variantlar</th>
+                                        <th>To'g'ri variant</th>
+                                        <th>Harakatlar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for question in questions %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ question.name }}</td>
+                                        <td>
+                                            {% for option in question.options.all %}
+                                                <div>{{ option.name }}</div>
+                                            {% empty %}
+                                                <div>Variant mavjud emas</div>
+                                            {% endfor %}
+                                        </td>
+                                        <td>
+                                            {% if question.correct_option %}
+                                                {{ question.correct_option.name }}
+                                            {% else %}
+                                                <div>Yo'q</div>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'question_detail' question.id %}" class="btn btn-info">Ko'rish</a>
+                                            <form method="post" action="{% url 'question_delete' question.id %}" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">O'chirish</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

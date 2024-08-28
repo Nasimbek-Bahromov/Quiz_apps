@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content" style="min-height: 608px;">
+    <section class="section">
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Savol: {{ question.name }}</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Variantlar:</p>
+                            <ul>
+                                {% for option in options %}
+                                    <li>{{ option.name }}{% if option.correct %} (To'g'ri){% endif %}</li>
+                                {% empty %}
+                                    <li>Variant mavjud emas</li>
+                                {% endfor %}
+                            </ul>
+                            <form method="post" action="{% url 'question_delete' question.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">O'chirish</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
