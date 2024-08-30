@@ -41,10 +41,14 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a href="{% url 'question_detail' question.id %}" class="btn btn-info">Ko'rish</a>
-                                            <form method="post" action="{% url 'question_delete' question.id %}" style="display:inline;">
+                                            <a href="{% url 'question_detail' question.id %}" class="btn btn-info" title="Ko'rish">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <form method="post" action="{% url 'question_delete' question.id %}" style="display:inline;" onsubmit="return confirm('Savolni o\'chirishni tasdiqlaysizmi?');">
                                                 {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger">O'chirish</button>
+                                                <button type="submit" class="btn btn-danger" title="O'chirish">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>

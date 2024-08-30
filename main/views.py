@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from .import models
-from .models import Quiz, Question, Option
+from .models import Quiz, Question, Option, AnswerDetail, Answer, User
 from random import choice
 
 def index(request):
     return render(request, 'index.html')
+
 
 def quizList(request):
     images = [
@@ -25,11 +26,12 @@ def quizList(request):
         quiz.img = choice(images)
         quizes_list.append(quiz)
 
-    return render(request, 'quiz-list.html', {'quizes': quizes_list})
+    return render(request, 'quiz-list.html', {'quizes': quizes_list, })
 
 def quizDetail(request, id):
-    quiz = models.Quiz.objects.get(id=id)
-    return render(request, 'quiz-detail.html', {'quiz': quiz})
+    quiz = get_object_or_404(models.Quiz, id=id)
+    count = len(get_users_for_quiz(quiz_id = quiz.id))
+    return render(request, 'quiz-detail.html', {'quiz': quiz, 'count':count})
 
 def createQuiz(request):
     if request.method == 'POST':
@@ -49,12 +51,10 @@ def questionCreate(request, quiz_id):
         options = request.POST.getlist('options[]')
         correct_option_index = int(request.POST.get('correct_option', -1))
 
-        # Savol yaratish
         question = Question.objects.create(name=question_name, quiz=quiz)
 
-        # Variantlarni yaratish
         for index, option_text in enumerate(options):
-            is_correct = (index == correct_option_index)
+            is_correct = (index == correct_option_index) 
             Option.objects.create(name=option_text, question=question, correct=is_correct)
 
         return redirect('quizDetail', id=quiz_id)
@@ -70,8 +70,50 @@ def questionList(request):
     questions = models.Question.objects.all()
     return render(request, 'question-list.html', {'questions': questions})
 
+
+
 @require_POST
 def questionDelete(request, id):
     question = get_object_or_404(Question, id=id)
     question.delete()
     return redirect('quizDetail', id=question.quiz.id)
+
+def get_users_for_quiz(quiz_id):
+    # Belirlangan quizga tegishli javoblarni olish
+    answers = Answer.objects.filter(quiz_id=quiz_id)
+    
+    # Qatnashgan foydalanuvchilarni olish
+    users = User.objects.filter(answer__in=answers).distinct()
+    
+    return users
+
+def quiz_users_view(request, quiz_id):
+    quiz = get_object_or_404(Quiz, id=quiz_id)
+    
+    # Quizga qatnashgan barcha foydalanuvchilar
+    answers = Answer.objects.filter(quiz=quiz)
+    
+    results = []
+    
+    for answer in answers:
+        answer_details = AnswerDetail.objects.filter(answer=answer)
+        
+        user_results = []
+        for detail in answer_details:
+            user_results.append({
+                'question': detail.question.name,
+                'correct_option': detail.question.correct_option.name if detail.question.correct_option else 'No option',
+                'user_choice': detail.user_choice.name,
+                'is_correct': detail.is_correct
+            })
+        
+        results.append({
+            'user': answer.author.username,
+            'results': user_results
+        })
+    
+    context = {
+        'quiz': quiz,
+        'results': results
+    }
+    return render(request, 'quiz_users.html', context)

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="main-content" style="min-height: 608px;">
+    <section class="section">
+        <div class="section-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>{{ quiz.name }} uchun qatnashuvchilar ro'yxati</h4>
+                        </div>
+                        <div class="card-body">
+                            {% for result in results %}
+                            <div class="mb-4">
+                                <h5>Foydalanuvchi: {{ result.user }}</h5>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Savol</th>
+                                            <th>To'g'ri javob</th>
+                                            <th>Foydalanuvchi javobi</th>
+                                            <th>Holat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in result.results %}
+                                        <tr>
+                                            <td>{{ item.question }}</td>
+                                            <td>{{ item.correct_option }}</td>
+                                            <td>{{ item.user_choice }}</td>
+                                            <td>
+                                                {% if item.is_correct %}
+                                                <span class="badge badge-success">To'g'ri</span>
+                                                {% else %}
+                                                <span class="badge badge-danger">Noto'g'ri</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

@@ -19,10 +19,6 @@
                                     <li>Variant mavjud emas</li>
                                 {% endfor %}
                             </ul>
-                            <form method="post" action="{% url 'question_delete' question.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">O'chirish</button>
-                            </form>
                         </div>
                     </div>
                 </div>

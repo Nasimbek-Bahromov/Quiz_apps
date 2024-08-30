@@ -26,7 +26,7 @@ class Question(models.Model):
     
     @property
     def options(self):
-        return Option.objects.filter(question=self)
+        return Option.objects.filter(question=self).order_by('?')
 
     @property
     def correct_option(self):
@@ -49,22 +49,23 @@ class Option(models.Model):
 class Answer(models.Model):
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    is_late = models.BooleanField()
+    start_time = models.DateTimeField(blank=True, null=True)
+    end_time = models.DateTimeField(blank=True, null=True)
+    is_late = models.BooleanField(blank=True, default=True)
 
     def __str__(self):
         return f"{self.author.username} -> {self.quiz.name}"
     
     def save(self, *args, **kwargs):
-        time = self.end_time - self.start_time
-        self.is_late = time.total_seconds() / 60 > self.quiz.amount
+        # time = self.end_time - self.start_time
+        # self.is_late = time.total_seconds() / 60 > self.quiz.amount
         super(Answer, self).save(*args, **kwargs)
 
 class AnswerDetail(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     user_choice = models.ForeignKey(Option, on_delete=models.CASCADE)
+    correct = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if AnswerDetail.objects.filter(answer=self.answer, question=self.question).exists():
@@ -73,4 +74,5 @@ class AnswerDetail(models.Model):
 
     @property
     def is_correct(self):
+        correct = self.user_choice == self.question.correct_option
         return self.user_choice == self.question.correct_option

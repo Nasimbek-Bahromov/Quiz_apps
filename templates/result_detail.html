@@ -37,10 +37,10 @@
         <div class="col-12 col-md-6 col-lg-3">
           <div class="card card-dark">
             <div class="card-header">
-              <h4><a href="{% url 'quiz_users' quiz.id %}" class="btn btn-info">Qatnashuvchilar</a></h4>
+              <h4>Foiz</h4>
             </div>
             <div class="card-body">
-              <p>{{count}}</p>
+              <p>{{ p }}%</p>
             </div>
           </div>
         </div>
@@ -50,9 +50,6 @@
           <div class="card">
             <div class="card-header d-flex justify-content-between">
               <h4>Savollar</h4>
-              <a href="{% url 'question_create' quiz.id %}" class="btn btn-success text-end">
-                <i class="fas fa-plus"></i> Savol qo'shish
-              </a>
             </div>
             <div class="card-body p-0">
               <div class="table-responsive">
@@ -61,27 +58,26 @@
                     <tr>
                       <th>#</th>
                       <th>Savol</th>
-                      <th>To'g'ri javoblar</th>
-                      <th>Harakatlar</th>
+                      <th>Foydalanuvchi tanlovi</th>
+                      <th>To'g'ri javob</th>
+                      <th>Status</th>
                     </tr>
-                    {% for question in quiz.questions %}
+                    {% for result in results %}
                     <tr>
                       <td>{{ forloop.counter }}</td>
-                      <td>{{ question.name }}</td>
+                      <td>{{ result.question.name }}</td>
                       <td>
-                        <div class="badge badge-success text-dark">{{ question.correct_option.name }}</div>
+                        <div class="badge badge-info text-dark">{{ result.user_choice.name }}</div>
                       </td>
                       <td>
-                        <a href="{% url 'question_detail' id=question.id %}" class="btn btn-primary">
-                          <i class="fas fa-info-circle"></i>
-                        </a>
-                        <form action="{% url 'question_delete' id=question.id %}" method="post" style="display:inline;">
-                          {% csrf_token %}
-                          <button type="submit" class="btn btn-danger"
-                            onclick="return confirm('Savolni o\'chirishni tasdiqlaysizmi?');">
-                            <i class="fas fa-trash"></i>
-                          </button>
-                        </form>
+                        <div class="badge badge-warning text-dark">{{ result.correct }}</div>
+                      </td>
+                      <td>
+                        {% if result.is_correct %}
+                        <div class="badge badge-success text-dark">To'g'ri</div>
+                        {% else %}
+                        <div class="badge badge-danger text-dark">Noto'g'ri</div>
+                        {% endif %}
                       </td>
                     </tr>
                     {% endfor %}

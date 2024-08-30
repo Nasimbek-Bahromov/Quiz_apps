@@ -3,6 +3,7 @@
 {% load static %}
 
 <!-- index.html  21 Nov 2019 03:44:50 GMT -->
+
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -15,6 +16,9 @@
   <link rel="stylesheet" href="{% static 'bundles/izitoast/css/iziToast.min.css' %}">
 
   <!-- Custom style CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="{% static 'css/custom.css' %}">
   <link rel='shortcut icon' type='image/x-icon' href="{% static 'img/favicon.ico' %}" />
   {% block css %}
@@ -81,13 +85,13 @@
                     <span class="time">5 Min Ago</span>
                   </span>
                 </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                      <img alt="image" src="{% static 'img/users/user-5.png' %}" class="rounded-circle">
+                    <img alt="image" src="{% static 'img/users/user-5.png' %}" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
                       Ryan</span> <span class="time messege-text">Your payment invoice is
                       generated.</span> <span class="time">12 Min Ago</span>
                   </span>
                 </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                      <img alt="image" src="{% static 'img/users/user-4.png' %}" class="rounded-circle">
+                    <img alt="image" src="{% static 'img/users/user-4.png' %}" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
                       Smith</span> <span class="time messege-text">hii John, I have upload
                       doc
@@ -95,7 +99,7 @@
                       Min Ago</span>
                   </span>
                 </a> <a href="#" class="dropdown-item"> <span class="dropdown-item-avatar text-white">
-                      <img alt="image" src="{% static 'img/users/user-3.png' %}" class="rounded-circle">
+                    <img alt="image" src="{% static 'img/users/user-3.png' %}" class="rounded-circle">
                   </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
                       Joshi</span> <span class="time messege-text">Please do as specify.
                       Let me
@@ -115,10 +119,11 @@
               </div>
             </div>
           </li>
-          
+
           <li class="dropdown"><a href="#" data-toggle="dropdown"
-              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image" src="{% static 'img/user.png' %}"
-                class="user-img-radious-style"> <span class="d-sm-none d-lg-inline-block"></span></a>
+              class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
+                src="{% static 'img/user.png' %}" class="user-img-radious-style"> <span
+                class="d-sm-none d-lg-inline-block"></span></a>
             <div class="dropdown-menu dropdown-menu-right pullDown">
               <div class="dropdown-title">Hello Sarah Smith</div>
               <a href="profile.html" class="dropdown-item has-icon"> <i class="far
@@ -146,50 +151,83 @@
           <ul class="sidebar-menu">
             <li class="menu-header">Main</li>
             <li class="dropdown active">
-              <a href="#" class="nav-link"><i data-feather="monitor"></i><span>Bosh sahifa</span></a>
+              <a href="{% url 'quizList' %}" class="nav-link"><i data-feather="monitor"></i><span>Bosh sahifa</span></a>
             </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-bar-chart">
+                  <path d="M4 15v6M9 10v11M14 6v15M19 4v17"></path>
+                </svg>
+                <span>Natijalar</span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'result' %}">Natijalar</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="menu-toggle nav-link has-dropdown">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-bar-chart">
+                  <path d="M4 15v6M9 10v11M14 6v15M19 4v17"></path>
+                </svg>
+                <span>Natijalar admin</span>
+              </a>
+              {% for quiz in quizes %}
+              <ul class="dropdown-menu">
+                <li><a class="nav-link" href="{% url 'quizDetail' quiz.id %}">{{quiz.name}}</a></li>
+              </ul>
+              {% endfor %}
+            </li>
+
           </ul>
         </aside>
       </div>
-{% block content %}
-{% endblock %}
+
+      {% block content %}
+
+
+      {% endblock %}
 
       <!-- Add this section for notifications -->
-      
+
       <!-- End of notifications section -->
 
-<footer class="main-footer">
-  <div class="footer-left">
-    <a href="templateshub.net">Templateshub</a></a>
+      <footer class="main-footer">
+        <div class="footer-left">
+          <a href="templateshub.net">Templateshub</a></a>
+        </div>
+        <div class="footer-right">
+        </div>
+      </footer>
+    </div>
   </div>
-  <div class="footer-right">
-  </div>
-</footer>
-</div>
-</div>
-<!-- General JS Scripts -->
-<script src="{% static 'js/app.min.js' %}"></script>
-<!-- JS Libraies -->
-<script src="{% static 'bundles/apexcharts/apexcharts.min.js' %}"></script>
-<!-- Page Specific JS File -->
-<script src="{% static 'js/page/index.js' %}"></script>
-<!-- Template JS File -->
-<script src="{% static 'js/scripts.js' %}"></script>
-<script src="{% static 'bundles/izitoast/js/iziToast.min.js' %}"></script>
-<!-- Page Specific JS File -->
-<script src="{% static 'js/page/toastr.js' %}"></script>
-<!-- Custom JS File -->
-<script src="{% static 'js/custom.js' %}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-{% for message in messages %}
-<script>
-  toastr["{{ message.tags }}"]("{{ message|escapejs }}");
+  <!-- General JS Scripts -->
+  <script src="{% static 'js/app.min.js' %}"></script>
+  <!-- JS Libraies -->
+  <script src="{% static 'bundles/apexcharts/apexcharts.min.js' %}"></script>
+  <!-- Page Specific JS File -->
+  <script src="{% static 'js/page/index.js' %}"></script>
+  <!-- Template JS File -->
+  <script src="{% static 'js/scripts.js' %}"></script>
+  <script src="{% static 'bundles/izitoast/js/iziToast.min.js' %}"></script>
+  <!-- Page Specific JS File -->
+  <script src="{% static 'js/page/toastr.js' %}"></script>
+  <!-- Custom JS File -->
+  <script src="{% static 'js/custom.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  {% for message in messages %}
+  <script>
+    toastr["{{ message.tags }}"]("{{ message|escapejs }}");
   </script>
-{% endfor %}
-{% block js %}
-{% endblock %}
+  {% endfor %}
+  {% block js %}
+  {% endblock %}
 </body>
 
 
 <!-- index.html  21 Nov 2019 03:47:04 GMT -->
+
 </html>
