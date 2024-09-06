@@ -11,4 +11,7 @@ urlpatterns = [
     path('question-create/<int:quiz_id>/', views.questionCreate, name='question_create'),
     path('question/delete/<int:id>/', views.questionDelete, name='question_delete'),
     path('quiz/detail/<int:quiz_id>/users/', views.quiz_users_view, name='quiz_users'),
+    path('quiz-export-answers/<int:quiz_id>/', views.export_quiz_answers_to_excel, name='export-quiz-answers-excel'),
+    path('answer-export/<int:answer_id>/', views.export_answer_detail_to_excel, name='export-answer-detail-excel'),
+    path('quiz-export-pdf/<int:quiz_id>/', views.render_quiz_to_pdf, name='export-quiz-pdf'),
 ]
