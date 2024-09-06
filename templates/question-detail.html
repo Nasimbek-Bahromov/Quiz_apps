@@ -11,12 +11,12 @@
                             <h4>Savol: {{ question.name }}</h4>
                         </div>
                         <div class="card-body">
-                            <p>Variantlar:</p>
+                            <p>Variantlar</p>
                             <ul>
                                 {% for option in options %}
                                     <li>{{ option.name }}{% if option.correct %} (To'g'ri){% endif %}</li>
                                 {% empty %}
-                                    <li>Variant mavjud emas</li>
+                                    <li>Variant mavjud yo'q</li>
                                 {% endfor %}
                             </ul>
                         </div>
